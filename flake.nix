@@ -25,6 +25,16 @@
       name = "ed";
       smoke = [ "--version" ];
       smokePattern = "GNU ed";
+
+      # Fold `ed` into the mega through the unpin-llvm engine: native Linux
+      # compiles via our static LLVM toolchain and emits a bitcode multicall
+      # module (one program, no deps beyond libc). The Windows cosmo path is
+      # untouched (engine is Linux-only).
+      engine = "unpin-llvm";
+      multicall = {
+        programs = [{ name = "ed"; }];
+      };
+
       build = pkgs: dropRed pkgs.pkgsStatic.ed;
       # Windows via cosmocc: ed needs POSIX <regex.h> (absent in mingw), which
       # cosmo's libc provides. ELF→ed.exe via the cosmo apelink hook.
