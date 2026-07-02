@@ -51,3 +51,4 @@ The [Releases](https://github.com/unpins/ed/releases) page has standalone binari
 - **`red` dropped:** upstream also installs `red` (restricted ed) as a `/bin/sh` wrapper — dropped here under the single-binary policy.
 - **Windows:** built via [Cosmopolitan](https://github.com/jart/cosmopolitan), not mingw — ed needs POSIX `<regex.h>`, which mingw lacks and cosmo's libc provides. Note that `ed` is a Unix line editor: feed it `\n`-terminated commands (a Windows `\r\n` script makes it report `?` on each command, exactly as native `ed` does).
 - **Man pages:** embedded; read with `unpin man ed`.
+- **Tests:** ed's upstream testsuite runs on native builds (passes clean under static-musl) and auto-skips on cross targets the build host can't execute.
