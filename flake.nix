@@ -15,9 +15,6 @@
     let
       lib = unpins-lib.lib;
       dropRed = drv: drv.overrideAttrs (o: {
-        # Run ed's testsuite on native runners; auto-skips on crosses the build
-        # host can't execute (Windows here = cosmo). Passes clean under static-musl.
-        doCheck = drv.stdenv.buildPlatform.canExecute drv.stdenv.hostPlatform;
         postInstall = (o.postInstall or "") + ''
           rm -f "$out/bin/red" "$out/share/man/man1/red.1"*
         '';
@@ -29,10 +26,7 @@
       smoke = [ "--version" ];
       smokePattern = "GNU ed";
 
-      # Fold `ed` into the mega through the unpin-llvm engine: native Linux
-      # compiles via our static LLVM toolchain and emits a bitcode multicall
-      # module (one program, no deps beyond libc). The Windows cosmo path is
-      # untouched (engine is Linux-only).
+      # One program; the .exe is cosmo and doesn't go through the engine.
       engine = "unpin-llvm";
       multicall = {
         programs = [{ name = "ed"; }];
